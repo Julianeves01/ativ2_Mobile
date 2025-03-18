@@ -1,34 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import * as SecureStore from "expo-secure-store";
 
-const TextoExibido = ({ titulo, texto, cor }) => (
-    <View style={[styles.textoContainer, !texto && styles.textoVazio]}>
-        <Text style={[styles.texto, { color: cor }]}>
-            {titulo}: {texto || "Nenhum texto salvo"}
-        </Text>
-    </View>
-);
-
-export default function DetalhesScreen({ route }) {
-    const { textoNaoPersistido } = route.params || {};
-    const [textoPersistido, setTextoPersistido] = useState("");
-
-    useEffect(() => {
-        const carregarTextoPersistido = async () => {
-            const textoSalvo = await SecureStore.getItemAsync("meuTexto");
-            if (textoSalvo) {
-                setTextoPersistido(textoSalvo);
-            }
-        };
-        carregarTextoPersistido();
-    }, []);
+export default function Detalhes() {
+    const [texto, setTexto] = useState("Texto sem persistência");
+    const [persistedTexto, setPersistedTexto] = useState("Texto com persistência");
 
     return (
         <View style={styles.container}>
             <Text style={styles.titulo}>Detalhes</Text>
-            <TextoExibido titulo="Sem persistência" texto={textoNaoPersistido} cor="#C33E60" />
-            <TextoExibido titulo="Persistência" texto={textoPersistido} cor="#206220" />
+
+            <Text style={styles.textoLaranja}>
+                Sem persistência: {texto || "Nenhum texto salvo"}
+            </Text>
+
+            <Text style={styles.textoRoxo}>
+                Persistência: {persistedTexto || "Nenhum texto salvo"}
+            </Text>
         </View>
     );
 }
@@ -39,7 +26,7 @@ const styles = StyleSheet.create({
         paddingVertical: 100,
         paddingHorizontal: 25,
         gap: 20,
-        backgroundColor: "#F8F9FA",
+        backgroundColor: "#EFEBE0",
     },
     titulo: {
         fontSize: 32,
@@ -48,16 +35,16 @@ const styles = StyleSheet.create({
         textDecorationLine: "underline",
         color: "#100B60",
     },
-    textoContainer: {
-        padding: 10,
-    },
-    textoVazio: {
-        backgroundColor: "#ECECEC",
-        borderWidth: 1,
-        borderColor: "#C0C0C0",
-    },
-    texto: {
+    textoLaranja: {
         fontSize: 20,
         textAlign: "center",
+        color: "#C33E60",
+        marginTop: 15,
+    },
+    textoRoxo: {
+        fontSize: 20,
+        textAlign: "center",
+        color: "#206220",
+        marginTop: 15,
     },
 });
